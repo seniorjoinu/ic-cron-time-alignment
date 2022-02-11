@@ -19,7 +19,7 @@ type ScheduledTask = record {
     id : TaskId;
     payload : Task;
     scheduled_at : nat64;
-    rescheduled_at : nat64;
+    rescheduled_at : opt nat64;
     scheduling_interval : SchedulingInterval;
     delay_passed : bool;
 };

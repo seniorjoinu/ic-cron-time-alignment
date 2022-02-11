@@ -1,13 +1,14 @@
-pub mod common;
-
-use crate::common::{DayOfWeek, TimeNanos, NANOS_IN_WEEK};
 use ic_cdk::api::time;
 use ic_cdk::export::candid::export_service;
 use ic_cdk::print;
 use ic_cdk::storage::{stable_restore, stable_save};
 use ic_cdk_macros::{heartbeat, post_upgrade, pre_upgrade, query, update};
 use ic_cron::implement_cron;
-use ic_cron::types::{Iterations, SchedulingInterval, TaskId};
+use ic_cron::types::{Iterations, ScheduledTask, SchedulingInterval, TaskId};
+
+use crate::common::{DayOfWeek, TimeNanos, NANOS_IN_WEEK};
+
+pub mod common;
 
 #[update]
 pub fn greet_each(weekday: DayOfWeek, name: String) -> TaskId {
@@ -20,6 +21,16 @@ pub fn greet_each(weekday: DayOfWeek, name: String) -> TaskId {
         },
     )
     .expect("Unable to enqueue a new cron task")
+}
+
+#[query]
+pub fn list_tasks() -> Vec<ScheduledTask> {
+    get_cron_state().get_tasks()
+}
+
+#[update]
+pub fn dequeue_task(id: TaskId) -> Option<ScheduledTask> {
+    cron_dequeue(id)
 }
 
 #[heartbeat]
