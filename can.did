@@ -1,0 +1,41 @@
+type TaskId = nat64;
+
+type Task = record {
+    data : blob;
+};
+
+type Iterations = variant {
+    Infinite;
+    Exact : nat64;
+};
+
+type SchedulingInterval = record {
+    delay_nano:  nat64;
+    interval_nano : nat64;
+    iterations : Iterations;
+};
+
+type ScheduledTask = record {
+    id : TaskId;
+    payload : Task;
+    scheduled_at : nat64;
+    rescheduled_at : nat64;
+    scheduling_interval : SchedulingInterval;
+    delay_passed : bool;
+};
+
+type DayOfWeek = variant {
+    Mon;
+    Tue;
+    Wed;
+    Thu;
+    Fri;
+    Sat;
+    Sun;
+}
+
+service : {
+    "greet_each" : (DayOfWeek, text) -> (TaskId);
+    "dequeue_task" : (TaskId) -> (opt ScheduledTask);
+    "list_tasks" : () -> (vec ScheduledTask) query;
+}

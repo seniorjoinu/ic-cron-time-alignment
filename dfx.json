@@ -1,0 +1,18 @@
+{
+  "canisters": {
+    "ic-cron-time-alignment": {
+      "build": "./build.sh",
+      "candid": "./can.did",
+      "wasm": "./target/wasm32-unknown-unknown/release/ic-cron-time-alignment-opt.wasm",
+      "type": "custom"
+    }
+  },
+  "dfx": "0.9.0",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
